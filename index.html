@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Power Now - Preregistro</title>
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WHZCQBFRF5"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // Reemplaza con tu ID real
+      gtag('config', 'G-WHZCQBFRF5');
+    </script>
+
+    <style>
+        :root {
+            --primary-color: #000000;
+            --bg-color: #ffffff;
+            --input-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --radius: 12px;
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; color: var(--primary-color);
+        }
+        .container { width: 100%; max-width: 400px; margin-top: 40px; }
+        .logo { width: 70px; height: auto; margin-bottom: 24px; }
+        h1 { font-size: 28px; font-weight: 800; margin: 0 0 10px 0; letter-spacing: -0.5px; }
+        h2 { font-size: 18px; font-weight: 500; color: #555; margin: 0 0 30px 0; }
+        .form-group { margin-bottom: 16px; position: relative; }
+        input {
+            width: 100%; padding: 16px; font-size: 16px;
+            border: 1px solid var(--border-color); border-radius: var(--radius);
+            outline: none; transition: 0.2s; background: var(--input-bg);
+            appearance: none; -webkit-appearance: none;
+        }
+        input:focus { border-color: #000; }
+        input:invalid:not(:placeholder-shown) { border-color: #ff4444; }
+        .required-mark { position: absolute; right: 15px; top: 18px; color: #000; font-size: 12px; pointer-events: none; }
+        button {
+            width: 100%; padding: 16px; background: #000; color: #fff;
+            border: none; border-radius: 8px; font-size: 16px; font-weight: 600;
+            cursor: pointer; margin-top: 10px; display: flex; justify-content: center; gap: 8px;
+        }
+        button:disabled { background: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <svg class="logo" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 25 C20 10 40 10 40 25 C40 40 20 40 20 25 M60 25 C60 10 80 10 80 25 C80 40 60 40 60 25" stroke="black" stroke-width="8" stroke-linecap="round"/>
+            <path d="M55 10 L45 25 L55 25 L45 40" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+        </svg>
+
+        <h1>Power Now</h1>
+        <h2>Registro anticipado - 50% OFF</h2>
+
+        <form id="power-form">
+            <div class="form-group"><input type="text" id="nombre" placeholder="Nombre" required><span class="required-mark">*</span></div>
+            <div class="form-group"><input type="email" id="email" placeholder="Email" required inputmode="email"><span class="required-mark">*</span></div>
+            <div class="form-group"><input type="tel" id="telefono" placeholder="Teléfono" required inputmode="tel"><span class="required-mark">*</span></div>
+            <div class="form-group"><input type="text" id="extra" placeholder="¿Te gustaría alquilar otra cosa?" required><span class="required-mark">*</span></div>
+
+            <button type="submit" id="submit-btn"><span id="btn-text">Enviar</span><span id="btn-icon">→</span></button>
+        </form>
+    </div>
+
+    <script>
+        // 2. PEGA AQUÍ TU URL DE APPS SCRIPT (WEBHOOK)
+        const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxa2mvtwfAYeNtprpd1fEp-tpLhtk0lJNs89T13LiyZ9Gm-O8X75BM8tn83Nba7dhtQ/exec';
+
+        const form = document.getElementById('power-form');
+        const btn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!form.checkValidity()) { form.reportValidity(); return; }
+
+            btnText.innerText = "Procesando...";
+            btn.disabled = true;
+
+            const formData = {
+                nombre: document.getElementById('nombre').value,
+                email: document.getElementById('email').value,
+                telefono: document.getElementById('telefono').value,
+                extra: document.getElementById('extra').value
+            };
+
+            fetch(WEBHOOK_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            .then(() => {
+                btnText.innerText = "Stay tuned ;)";
+                document.getElementById('btn-icon').style.display = "none";
+                if (typeof gtag === 'function') {
+                    gtag('event', 'generate_lead', { 'event_category': 'Formulario', 'event_label': 'Exito' });
+                }
+                form.reset();
+                btn.style.backgroundColor = "#333";
+            })
+            .catch(error => {
+                alert('Error de conexión.');
+                btnText.innerText = "Enviar";
+                btn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
