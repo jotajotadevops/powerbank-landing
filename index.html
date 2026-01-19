@@ -5,87 +5,228 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Power Now - Preregistro</title>
     
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2WYDK4WKNF"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
-      // Reemplaza con tu ID real
       gtag('config', 'G-2WYDK4WKNF');
     </script>
 
     <style>
         :root {
-            --primary-color: #000000;
-            --bg-color: #ffffff;
-            --input-bg: #ffffff;
-            --border-color: #e0e0e0;
-            --radius: 12px;
+            --primary: #111111;
+            --background: #F2F4F7; /* Gris muy suave, premium */
+            --card-bg: #FFFFFF;
+            --border: #E0E0E0;
+            --error: #E53935;
+            --success: #2E7D32;
+            --radius: 16px;
         }
+
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            margin: 0; padding: 20px;
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; color: var(--primary-color);
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: var(--primary);
         }
-        .container { width: 100%; max-width: 400px; margin-top: 40px; }
-        .logo { width: 70px; height: auto; margin-bottom: 24px; }
-        h1 { font-size: 28px; font-weight: 800; margin: 0 0 10px 0; letter-spacing: -0.5px; }
-        h2 { font-size: 18px; font-weight: 500; color: #555; margin: 0 0 30px 0; }
+
+        /* DISEÑO DE TARJETA (Genera confianza y orden) */
+        .card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06); /* Sombra suave y moderna */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-img { 
+            width: 160px; 
+            height: auto; 
+            margin-bottom: 20px; 
+            object-fit: contain;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+
+        h2 {
+            font-size: 15px;
+            font-weight: 500;
+            color: #667085; /* Gris texto secundario */
+            margin: 0 0 32px 0;
+            text-align: center;
+        }
+
+        form { width: 100%; }
+
         .form-group { margin-bottom: 16px; position: relative; }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #344054;
+            margin-left: 4px;
+        }
+
         input {
-            width: 100%; padding: 16px; font-size: 16px;
-            border: 1px solid var(--border-color); border-radius: var(--radius);
-            outline: none; transition: 0.2s; background: var(--input-bg);
-            appearance: none; -webkit-appearance: none;
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            outline: none;
+            background: #FFFFFF;
+            color: var(--primary);
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
         }
-        input:focus { border-color: #000; }
-        input:invalid:not(:placeholder-shown) { border-color: #ff4444; }
-        .required-mark { position: absolute; right: 15px; top: 18px; color: #000; font-size: 12px; pointer-events: none; }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05); /* Anillo de foco sutil */
+        }
+
+        input::placeholder { color: #98A2B3; }
+
+        /* Validación visual */
+        input:invalid:not(:placeholder-shown) {
+            border-color: var(--error);
+            background-color: #FEF2F2;
+        }
+
         button {
-            width: 100%; padding: 16px; background: #000; color: #fff;
-            border: none; border-radius: 8px; font-size: 16px; font-weight: 600;
-            cursor: pointer; margin-top: 10px; display: flex; justify-content: center; gap: 8px;
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform 0.1s, opacity 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-        button:disabled { background: #555; }
+
+        button:active { transform: scale(0.98); }
+        button:hover { opacity: 0.9; }
+        button:disabled { background-color: #9CA3AF; cursor: not-allowed; box-shadow: none; }
+
+        /* Elemento de confianza */
+        .trust-badge {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #98A2B3;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        /* Animación de éxito */
+        @keyframes pop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .success-state { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <svg class="logo" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 25 C20 10 40 10 40 25 C40 40 20 40 20 25 M60 25 C60 10 80 10 80 25 C80 40 60 40 60 25" stroke="black" stroke-width="8" stroke-linecap="round"/>
-            <path d="M55 10 L45 25 L55 25 L45 40" stroke="black" stroke-width="4" stroke-linejoin="round"/>
-        </svg>
+
+    <div class="card">
+        <img src="https://firebasestorage.googleapis.com/v0/b/pachanga-f6d89.firebasestorage.app/o/assets%2FChatGPT%20Image%2019%20ene%202026%2C%2012_15_54%20p.m..png?alt=media&token=36425786-b3e0-4956-a5c7-5dea8a501421" 
+             alt="Power Now" 
+             class="logo-img">
 
         <h1>Power Now</h1>
-        <h2>Registro anticipado - 50% OFF</h2>
+        <h2>Consigue 50% OFF en tu primer carga ⚡</h2>
 
-        <form id="power-form">
-            <div class="form-group"><input type="text" id="nombre" placeholder="Nombre" required><span class="required-mark">*</span></div>
-            <div class="form-group"><input type="email" id="email" placeholder="Email" required inputmode="email"><span class="required-mark">*</span></div>
-            <div class="form-group"><input type="tel" id="telefono" placeholder="Teléfono" required inputmode="tel"><span class="required-mark">*</span></div>
-            <div class="form-group"><input type="text" id="extra" placeholder="¿Te gustaría alquilar otra cosa?" required><span class="required-mark">*</span></div>
+        <form id="power-form" novalidate>
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" placeholder="Ej. Joaco" required minlength="2">
+            </div>
 
-            <button type="submit" id="submit-btn"><span id="btn-text">Enviar</span><span id="btn-icon">→</span></button>
+            <div class="form-group">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" placeholder="hola@ejemplo.com" required inputmode="email">
+            </div>
+
+            <div class="form-group">
+                <label for="telefono">WhatsApp</label>
+                <input type="tel" id="telefono" placeholder="11 1234 5678" required inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            </div>
+
+            <div class="form-group">
+                <label for="extra">¿Qué más te gustaría alquilar?</label>
+                <input type="text" id="extra" placeholder="Cargador de Mac, Cables..." required>
+            </div>
+
+            <button type="submit" id="submit-btn">
+                <span id="btn-text">Preregistrarme</span>
+                <span id="btn-icon">→</span>
+            </button>
         </form>
+
+        <div class="trust-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Tus datos están 100% seguros
+        </div>
     </div>
 
     <script>
-        // 2. PEGA AQUÍ TU URL DE APPS SCRIPT (WEBHOOK)
         const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxQQNNpUtusZ5KySePF_zF4b0s5c9TLtAOB2usP6wr26-4bkVtMMC_OyQf12P4Gm82B/exec';
 
         const form = document.getElementById('power-form');
         const btn = document.getElementById('submit-btn');
         const btnText = document.getElementById('btn-text');
+        const btnIcon = document.getElementById('btn-icon');
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            if (!form.checkValidity()) { form.reportValidity(); return; }
 
-            btnText.innerText = "Procesando...";
+            // Validación estricta antes de enviar
+            if (!form.checkValidity()) {
+                // Muestra los errores nativos del navegador de forma forzada para que el usuario sepa qué falta
+                form.reportValidity();
+                return;
+            }
+
+            // Estado de carga
+            const originalText = btnText.innerText;
+            btnText.innerText = "Guardando...";
+            btn.style.opacity = "0.7";
             btn.disabled = true;
 
             const formData = {
@@ -102,17 +243,25 @@
                 body: JSON.stringify(formData)
             })
             .then(() => {
+                // ÉXITO
                 btnText.innerText = "Stay tuned ;)";
-                document.getElementById('btn-icon').style.display = "none";
+                btnIcon.innerText = "✓"; // Cambia flecha por check
+                
+                // Trackear en Analytics
                 if (typeof gtag === 'function') {
                     gtag('event', 'generate_lead', { 'event_category': 'Formulario', 'event_label': 'Exito' });
                 }
+
+                // Resetear form
                 form.reset();
-                btn.style.backgroundColor = "#333";
+                btn.style.backgroundColor = "#2E7D32"; // Color verde éxito
+                btn.style.opacity = "1";
+                btn.classList.add("success-state");
             })
             .catch(error => {
-                alert('Error de conexión.');
-                btnText.innerText = "Enviar";
+                alert('Hubo un pequeño problema de conexión. Intenta de nuevo.');
+                btnText.innerText = originalText;
+                btn.style.opacity = "1";
                 btn.disabled = false;
             });
         });
