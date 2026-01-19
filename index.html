@@ -20,7 +20,7 @@
     <style>
         :root {
             --primary: #111111;
-            --background: #F2F4F7; /* Gris muy suave, premium */
+            --background: #F2F4F7;
             --card-bg: #FFFFFF;
             --border: #E0E0E0;
             --error: #E53935;
@@ -43,25 +43,43 @@
             color: var(--primary);
         }
 
-        /* DISEÑO DE TARJETA (Genera confianza y orden) */
         .card {
             background: var(--card-bg);
             width: 100%;
             max-width: 420px;
-            padding: 40px 30px;
+            padding: 30px 30px;
             border-radius: 24px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.06); /* Sombra suave y moderna */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06);
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .logo-img { 
-            width: 160px; 
-            height: auto; 
-            margin-bottom: 20px; 
-            object-fit: contain;
+        /* --- NUEVOS ESTILOS PARA EL RECORTE DEL LOGO --- */
+        
+        /* Esta es la "ventana" de recorte */
+        .logo-cropper {
+            width: 140px;  /* Ancho del logo visible */
+            height: 90px;  /* Alto del logo visible (rectangular para ajustar al dibujo) */
+            overflow: hidden; /* CLAVE: Oculta lo que se salga de esta caja */
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Opcional: si quieres que el recorte tenga bordes redondeados */
+            /* border-radius: 12px; */
         }
+
+        /* La imagen original de Firebase */
+        .logo-img { 
+            /* Hacemos "zoom": la imagen será un 60% más ancha que su ventana contenedora */
+            width: 160%; 
+            height: auto;
+            /* Aseguramos que se centre perfectamente para que el zoom recorte los bordes parejos */
+            object-fit: cover;
+            object-position: center;
+        }
+        /* ---------------------------------------------- */
 
         h1 {
             font-size: 24px;
@@ -74,7 +92,7 @@
         h2 {
             font-size: 15px;
             font-weight: 500;
-            color: #667085; /* Gris texto secundario */
+            color: #667085;
             margin: 0 0 32px 0;
             text-align: center;
         }
@@ -108,12 +126,11 @@
 
         input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05); /* Anillo de foco sutil */
+            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
         }
 
         input::placeholder { color: #98A2B3; }
 
-        /* Validación visual */
         input:invalid:not(:placeholder-shown) {
             border-color: var(--error);
             background-color: #FEF2F2;
@@ -143,7 +160,6 @@
         button:hover { opacity: 0.9; }
         button:disabled { background-color: #9CA3AF; cursor: not-allowed; box-shadow: none; }
 
-        /* Elemento de confianza */
         .trust-badge {
             margin-top: 20px;
             font-size: 12px;
@@ -152,23 +168,23 @@
             align-items: center;
             gap: 6px;
         }
-        
-        /* Animación de éxito */
+
         @keyframes pop {
             0% { transform: scale(0.8); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
         .success-state { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-
     </style>
 </head>
 <body>
 
     <div class="card">
-        <img src="https://firebasestorage.googleapis.com/v0/b/pachanga-f6d89.firebasestorage.app/o/assets%2FChatGPT%20Image%2019%20ene%202026%2C%2012_15_54%20p.m..png?alt=media&token=36425786-b3e0-4956-a5c7-5dea8a501421" 
-             alt="Power Now" 
-             class="logo-img">
-
+        
+        <div class="logo-cropper">
+            <img src="https://firebasestorage.googleapis.com/v0/b/pachanga-f6d89.firebasestorage.app/o/assets%2FChatGPT%20Image%2019%20ene%202026%2C%2012_15_54%20p.m..png?alt=media&token=36425786-b3e0-4956-a5c7-5dea8a501421" 
+                 alt="Power Now" 
+                 class="logo-img">
+        </div>
         <h1>Power Now</h1>
         <h2>Consigue 50% OFF en tu primer carga ⚡</h2>
 
@@ -200,71 +216,4 @@
         </form>
 
         <div class="trust-badge">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-            Tus datos están 100% seguros
-        </div>
-    </div>
-
-    <script>
-        const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxQQNNpUtusZ5KySePF_zF4b0s5c9TLtAOB2usP6wr26-4bkVtMMC_OyQf12P4Gm82B/exec';
-
-        const form = document.getElementById('power-form');
-        const btn = document.getElementById('submit-btn');
-        const btnText = document.getElementById('btn-text');
-        const btnIcon = document.getElementById('btn-icon');
-
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            // Validación estricta antes de enviar
-            if (!form.checkValidity()) {
-                // Muestra los errores nativos del navegador de forma forzada para que el usuario sepa qué falta
-                form.reportValidity();
-                return;
-            }
-
-            // Estado de carga
-            const originalText = btnText.innerText;
-            btnText.innerText = "Guardando...";
-            btn.style.opacity = "0.7";
-            btn.disabled = true;
-
-            const formData = {
-                nombre: document.getElementById('nombre').value,
-                email: document.getElementById('email').value,
-                telefono: document.getElementById('telefono').value,
-                extra: document.getElementById('extra').value
-            };
-
-            fetch(WEBHOOK_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-            })
-            .then(() => {
-                // ÉXITO
-                btnText.innerText = "Stay tuned ;)";
-                btnIcon.innerText = "✓"; // Cambia flecha por check
-                
-                // Trackear en Analytics
-                if (typeof gtag === 'function') {
-                    gtag('event', 'generate_lead', { 'event_category': 'Formulario', 'event_label': 'Exito' });
-                }
-
-                // Resetear form
-                form.reset();
-                btn.style.backgroundColor = "#2E7D32"; // Color verde éxito
-                btn.style.opacity = "1";
-                btn.classList.add("success-state");
-            })
-            .catch(error => {
-                alert('Hubo un pequeño problema de conexión. Intenta de nuevo.');
-                btnText.innerText = originalText;
-                btn.style.opacity = "1";
-                btn.disabled = false;
-            });
-        });
-    </script>
-</body>
-</html>
+            <svg width="12" height="12
